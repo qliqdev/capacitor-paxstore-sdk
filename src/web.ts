@@ -1,9 +1,9 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { PaxstoreSdkPlugin } from './definitions';
+import type {InitOptions, PaxstoreSdkPlugin} from './definitions';
 
 export class PaxstoreSdkWeb extends WebPlugin implements PaxstoreSdkPlugin {
-  async echo(options: { value: string }): Promise<{ value: string }> {
+  async init(options: InitOptions): Promise<any> {
     console.log('ECHO', options);
     return options;
   }

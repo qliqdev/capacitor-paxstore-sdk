@@ -2,7 +2,7 @@ package com.capacitorjs.plugins.paxstore;
 
 public class PaxstoreSdk {
 
-    public String echo(String value) {
-        return value;
+    public String init(String appkey, String appSecret) {
+        return appkey;
     }
 }

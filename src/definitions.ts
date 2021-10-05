@@ -1,3 +1,8 @@
 export interface PaxstoreSdkPlugin {
-  echo(options: { value: string }): Promise<{ value: string }>;
+    init(options: InitOptions): Promise<any>;
+}
+
+export interface InitOptions {
+    appkey: string;
+    appSecret: string;
 }
