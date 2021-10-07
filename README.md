@@ -11,9 +11,63 @@ npx cap sync
 
 ## API
 
-<docgen-index></docgen-index>
+<docgen-index>
+
+* [`echo(...)`](#echo)
+* [`init(...)`](#init)
+* [Interfaces](#interfaces)
+
+</docgen-index>
 
 <docgen-api>
-<!-- run docgen to generate docs from the source -->
-<!-- More info: https://github.com/ionic-team/capacitor-docgen -->
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### echo(...)
+
+```typescript
+echo(options: { value: string; }) => any
+```
+
+Initialize sdk.
+
+| Param         | Type                            | Description                         |
+| ------------- | ------------------------------- | ----------------------------------- |
+| **`options`** | <code>{ value: string; }</code> | : {value: string} Get from offsite. |
+
+**Returns:** <code>any</code>
+
+**Since:** 1.0.0
+
+--------------------
+
+
+### init(...)
+
+```typescript
+init(options: InitOptions) => any
+```
+
+Initialize sdk.
+
+| Param         | Type                                                | Description                                             |
+| ------------- | --------------------------------------------------- | ------------------------------------------------------- |
+| **`options`** | <code><a href="#initoptions">InitOptions</a></code> | : {appKey: string, appSecret: string} Get from offsite. |
+
+**Returns:** <code>any</code>
+
+**Since:** 1.0.0
+
+--------------------
+
+
+### Interfaces
+
+
+#### InitOptions
+
+| Prop            | Type                |
+| --------------- | ------------------- |
+| **`appkey`**    | <code>string</code> |
+| **`appSecret`** | <code>string</code> |
+
 </docgen-api>
