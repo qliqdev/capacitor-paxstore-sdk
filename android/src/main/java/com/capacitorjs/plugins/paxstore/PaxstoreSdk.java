@@ -12,11 +12,43 @@ import com.pax.market.android.app.sdk.BaseApiService;
 import com.pax.market.android.app.sdk.StoreSdk;
 import com.pax.market.android.app.sdk.dto.TerminalInfo;
 import com.pax.unifiedsdk_psp_3rd_app.factory.ITransAPI;
-import com.pax.unifiedsdk_psp_3rd_app.message.BaseResponse;
 import com.pax.unifiedsdk_psp_3rd_app.message.PurchaseMsg;
 import com.pax.unifiedsdk_psp_3rd_app.sdkconstants.SdkConstants;
 
 public class PaxstoreSdk {
+
+    static class PaxConfigs{
+        private String appKey;
+        private String appSecret;
+        private String packageName;
+
+        public String getAppKey() {
+            return appKey;
+        }
+
+        public void setAppKey(String appKey) {
+            this.appKey = appKey;
+        }
+
+        public String getAppSecret() {
+            return appSecret;
+        }
+
+        public void setAppSecret(String appSecret) {
+            this.appSecret = appSecret;
+        }
+
+        public String getPackageName() {
+            return packageName;
+        }
+
+        public void setPackageName(String packageName) {
+            this.packageName = packageName;
+        }
+    }
+
+    PaxConfigs configs = new PaxConfigs();
+
     public String echo(String value) {
         return value;
     }
@@ -24,6 +56,7 @@ public class PaxstoreSdk {
     public void init(Application activity, PluginCall call ) {
         String appKey = call.getString("appKey");
         String appSecret = call.getString("appSecret");
+        String packageName = call.getString("packageName");
         if (appKey == null) {
             call.reject("Must provide appkey");
             return;
@@ -33,11 +66,22 @@ public class PaxstoreSdk {
             call.reject("Must provide appSecret");
             return;
         }
+
+        if (packageName == null) {
+            call.reject("Must provide packageName");
+            return;
+        }
+
         try {
             StoreSdk.getInstance().init(activity, appKey, appSecret, new BaseApiService.Callback() {
                 @Override
                 public void initSuccess() {
                     //TODO Do your business here
+
+                    configs.setAppKey(appKey);
+                    configs.setAppSecret(appSecret);
+                    configs.setPackageName(packageName);
+
                     JSObject ret = new JSObject();
                     ret.put("value", "Запуск");
                     call.resolve(ret);
@@ -86,7 +130,7 @@ public class PaxstoreSdk {
     public boolean startSale(PluginCall call, ITransAPI transAPI, Context context) {
         String amount = call.getString("amount");
         if (amount == null) {
-            call.reject("Must provide appkey");
+            call.reject("Must provide amount");
             return false;
         }
 
@@ -94,7 +138,8 @@ public class PaxstoreSdk {
             PurchaseMsg.Request request = new PurchaseMsg.Request();
             request.setAmount(Long.parseLong(amount));
             request.setCategory(SdkConstants.CATEGORY_PURCHASE);
-            request.setPackageName("com.pax.psp_3rd_app");
+            request.setPackageName(configs.getPackageName());
+            request.setAppId(configs.getAppKey());
             Boolean response = transAPI.startTrans(context, request);
             JSObject ret = new JSObject();
             ret.put("value", response);

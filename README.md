@@ -97,15 +97,15 @@ API to get base terminal information from PAXSTORE client. (Support from PAXSTOR
 ### startSale(...)
 
 ```typescript
-startSale(amount: number) => any
+startSale(options: SaleOptions) => any
 ```
 
 Start Sale
 API to start payment
 
-| Param        | Type                |
-| ------------ | ------------------- |
-| **`amount`** | <code>number</code> |
+| Param         | Type                                                |
+| ------------- | --------------------------------------------------- |
+| **`options`** | <code><a href="#saleoptions">SaleOptions</a></code> |
 
 **Returns:** <code>any</code>
 
@@ -119,9 +119,17 @@ API to start payment
 
 #### InitOptions
 
-| Prop            | Type                |
-| --------------- | ------------------- |
-| **`appKey`**    | <code>string</code> |
-| **`appSecret`** | <code>string</code> |
+| Prop              | Type                |
+| ----------------- | ------------------- |
+| **`appKey`**      | <code>string</code> |
+| **`appSecret`**   | <code>string</code> |
+| **`packageName`** | <code>string</code> |
+
+
+#### SaleOptions
+
+| Prop         | Type                |
+| ------------ | ------------------- |
+| **`amount`** | <code>string</code> |
 
 </docgen-api>

@@ -1,6 +1,11 @@
 export interface InitOptions {
     appKey: string;
     appSecret: string;
+    packageName: string;
+}
+
+export interface SaleOptions {
+    amount: string;
 }
 
 export interface PaxstoreSdkPlugin{
@@ -51,5 +56,5 @@ export interface PaxstoreSdkPlugin{
      * @example
      * import PaxstoreSdk from 'capacitor-paxstore-sdk';
      */
-    startSale(amount: number): Promise<any>;
+    startSale(options: SaleOptions): Promise<boolean>;
 }
