@@ -15,6 +15,9 @@ npx cap sync
 
 * [`echo(...)`](#echo)
 * [`init(...)`](#init)
+* [`checkInit()`](#checkinit)
+* [`getInfo()`](#getinfo)
+* [`startSale(...)`](#startsale)
 * [Interfaces](#interfaces)
 
 </docgen-index>
@@ -60,6 +63,57 @@ Initialize sdk.
 --------------------
 
 
+### checkInit()
+
+```typescript
+checkInit() => any
+```
+
+Check Initialization.
+
+**Returns:** <code>any</code>
+
+**Since:** 1.0.8
+
+--------------------
+
+
+### getInfo()
+
+```typescript
+getInfo() => any
+```
+
+Get Terminal Base Information
+API to get base terminal information from PAXSTORE client. (Support from PAXSTORE client V6.1.)
+
+**Returns:** <code>any</code>
+
+**Since:** 1.0.7
+
+--------------------
+
+
+### startSale(...)
+
+```typescript
+startSale(amount: number) => any
+```
+
+Start Sale
+API to start payment
+
+| Param        | Type                |
+| ------------ | ------------------- |
+| **`amount`** | <code>number</code> |
+
+**Returns:** <code>any</code>
+
+**Since:** 1.0.9
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -67,7 +121,7 @@ Initialize sdk.
 
 | Prop            | Type                |
 | --------------- | ------------------- |
-| **`appkey`**    | <code>string</code> |
+| **`appKey`**    | <code>string</code> |
 | **`appSecret`** | <code>string</code> |
 
 </docgen-api>

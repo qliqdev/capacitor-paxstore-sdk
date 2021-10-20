@@ -1,6 +1,6 @@
 {
   "name": "capacitor-paxstore-sdk",
-  "version": "1.0.4",
+  "version": "1.0.11",
   "description": "Communicate with Paxstore SDK, to receive data from POS treminals.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "@capacitor/android": "^3.2.4",
-    "@capacitor/core": "^3.2.4",
+    "@capacitor/core": "^3.2.5",
     "@capacitor/docgen": "^0.0.17",
     "@capacitor/ios": "^3.2.4",
     "@ionic/eslint-config": "^0.3.0",

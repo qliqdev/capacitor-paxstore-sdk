@@ -5,20 +5,22 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import com.pax.unifiedsdk_psp_3rd_app.factory.ITransAPI;
+import com.pax.unifiedsdk_psp_3rd_app.factory.TransAPIFactory;
+import com.pax.unifiedsdk_psp_3rd_app.message.BaseResponse;
+import com.pax.unifiedsdk_psp_3rd_app.message.PurchaseMsg;
+import com.pax.unifiedsdk_psp_3rd_app.sdkconstants.SdkConstants;
 
 @CapacitorPlugin(name = "PaxstoreSdk")
-
 public class PaxstoreSdkPlugin extends Plugin {
 
-    private PaxstoreSdk implementation;
+    public ITransAPI transAPI = TransAPIFactory.createTransAPI();
+    private BaseResponse baseResponse;
 
-    @Override
-    public void load() {
-        implementation = new PaxstoreSdk(getActivity());
-    }
+    private final PaxstoreSdk implementation = new PaxstoreSdk();
 
     @PluginMethod
-    private void echo(PluginCall call) {
+    public void echo(PluginCall call) {
         String value = call.getString("value");
         try {
             JSObject ret = new JSObject();
@@ -30,23 +32,28 @@ public class PaxstoreSdkPlugin extends Plugin {
     }
 
     @PluginMethod
-    private void init(PluginCall call) {
-        String appKey = call.getString("appKey");
-        String appSecret = call.getString("appSecret");
-        if (appKey == null) {
-            call.reject("Must provide appkey");
-            return;
-        }
+    public void init(PluginCall call) {
+        implementation.init(getActivity().getApplication(), call);
+    }
 
-        if (appSecret == null) {
-            call.reject("Must provide appSecret");
-            return;
-        }
+    @PluginMethod
+    public void checkInit(PluginCall call) {
         try {
-            implementation.init(appKey, appSecret);
-            call.resolve();
+            JSObject ret = new JSObject();
+            ret.put("isInitialized", implementation.checkInit());
+            call.resolve(ret);
         } catch (Exception e) {
             call.reject(e.getMessage());
         }
+    }
+
+    @PluginMethod
+    public void getInfo(PluginCall call) {
+        implementation.getInfo(getActivity().getApplication(), call);
+    }
+
+    @PluginMethod
+    public void startSale(PluginCall call) {
+        implementation.startSale(call, transAPI, getContext());
     }
 }

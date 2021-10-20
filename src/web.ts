@@ -10,4 +10,16 @@ export class PaxstoreSdkWeb extends WebPlugin implements PaxstoreSdkPlugin {
   init(): Promise<{value: string}> {
     throw this.unimplemented('Not implemented on web.');
   }
+
+  checkInit(): Promise<{isInitialized: boolean}> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
+  getInfo(): Promise<{value: any}> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
+  startSale(): Promise<any> {
+    throw this.unimplemented('Not implemented on web.');
+  }
 }
