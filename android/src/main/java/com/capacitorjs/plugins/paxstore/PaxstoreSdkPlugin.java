@@ -8,8 +8,6 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 import com.pax.unifiedsdk_psp_3rd_app.factory.ITransAPI;
 import com.pax.unifiedsdk_psp_3rd_app.factory.TransAPIFactory;
 import com.pax.unifiedsdk_psp_3rd_app.message.BaseResponse;
-import com.pax.unifiedsdk_psp_3rd_app.message.PurchaseMsg;
-import com.pax.unifiedsdk_psp_3rd_app.sdkconstants.SdkConstants;
 
 @CapacitorPlugin(name = "PaxstoreSdk")
 public class PaxstoreSdkPlugin extends Plugin {
@@ -54,7 +52,7 @@ public class PaxstoreSdkPlugin extends Plugin {
 
     @PluginMethod
     public void startSale(PluginCall call) {
-        implementation.startSale(call, getContext());
+        implementation.startSale(call, transAPI, getContext());
     }
 
 }
