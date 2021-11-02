@@ -54,6 +54,7 @@ public class PaxstoreSdkPlugin extends Plugin {
 
     @PluginMethod
     public void startSale(PluginCall call) {
-        implementation.startSale(call, transAPI, getContext());
+        implementation.startSale(call, getContext());
     }
+
 }

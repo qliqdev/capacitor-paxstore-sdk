@@ -5,6 +5,9 @@ import static java.security.AccessController.getContext;
 import android.app.Application;
 import android.content.Context;
 import android.os.RemoteException;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.getcapacitor.JSObject;
 import com.getcapacitor.PluginCall;
@@ -14,10 +17,15 @@ import com.pax.market.android.app.sdk.dto.TerminalInfo;
 import com.pax.unifiedsdk_psp_3rd_app.factory.ITransAPI;
 import com.pax.unifiedsdk_psp_3rd_app.message.PurchaseMsg;
 import com.pax.unifiedsdk_psp_3rd_app.sdkconstants.SdkConstants;
+import com.pax.vendlinksdk.constant.SdkConstant;
+import com.pax.vendlinksdk.core.interfaces.OnCompleteListener;
+import com.pax.vendlinksdk.request.SaleRequest;
+import com.pax.vendlinksdk.response.SaleResponse;
+import com.pax.vendlinksdk.utils.GsonUtil;
 
 public class PaxstoreSdk {
 
-    static class PaxConfigs{
+    static class PaxConfigs {
         private String appKey;
         private String appSecret;
         private String packageName;
@@ -53,7 +61,7 @@ public class PaxstoreSdk {
         return value;
     }
 
-    public void init(Application activity, PluginCall call ) {
+    public void init(Application activity, PluginCall call) {
         String appKey = call.getString("appKey");
         String appSecret = call.getString("appSecret");
         String packageName = call.getString("packageName");
@@ -104,9 +112,9 @@ public class PaxstoreSdk {
         return StoreSdk.getInstance().checkInitialization();
     }
 
-    public void getInfo(Application activity, PluginCall call ) {
+    public void getInfo(Application activity, PluginCall call) {
         try {
-            StoreSdk.getInstance().getBaseTerminalInfo(activity,new BaseApiService.ICallBack() {
+            StoreSdk.getInstance().getBaseTerminalInfo(activity, new BaseApiService.ICallBack() {
                 @Override
                 public void onSuccess(Object obj) {
                     TerminalInfo terminalInfo = (TerminalInfo) obj;
@@ -127,7 +135,7 @@ public class PaxstoreSdk {
 
     }
 
-    public boolean startSale(PluginCall call, ITransAPI transAPI, Context context) {
+    public boolean startSaleOld(PluginCall call, ITransAPI transAPI, Context context) {
         String amount = call.getString("amount");
         if (amount == null) {
             call.reject("Must provide amount");
@@ -148,5 +156,35 @@ public class PaxstoreSdk {
             call.reject(e.getMessage());
         }
         return true;
+    }
+
+    public void startSale(PluginCall call, Context context) {
+        String amount = call.getString("amount");
+        if (amount == null) {
+            call.reject("Must provide amount");
+            return;
+        }
+        SaleRequest saleRequest = new SaleRequest(context, amount);
+        saleRequest.setPaymentMethod(SdkConstant.PAYMENT_METHOD_BANKCARD)
+                .setPspId(configs.getAppKey())
+                .onComplete(new OnCompleteListener<SaleResponse>() {
+                    @Override
+                    public void onSuccess(@NonNull SaleResponse saleResponse) {
+                        String jsonResult = GsonUtil.beanToJson(saleResponse);
+                        JSObject ret = new JSObject();
+                        ret.put("value", jsonResult);
+                        call.resolve(ret);
+                    }
+
+                    @Override
+                    public void onProcess(@NonNull SaleResponse saleResponse) {
+
+                    }
+
+                    @Override
+                    public void onError(String s, String s1) {
+                        call.reject(s, s1);
+                    }
+                }).start();
     }
 }
