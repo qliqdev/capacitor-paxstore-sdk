@@ -16,6 +16,10 @@ npx cap sync
 * [`init(...)`](#init)
 * [`checkInit()`](#checkinit)
 * [`startSale(...)`](#startsale)
+* [`startReversal(...)`](#startreversal)
+* [`startRefund(...)`](#startrefund)
+* [`startPrintTrans(...)`](#startprinttrans)
+* [`startPrintTransTotal(...)`](#startprinttranstotal)
 * [Interfaces](#interfaces)
 
 </docgen-index>
@@ -77,6 +81,86 @@ API to start payment
 --------------------
 
 
+### startReversal(...)
+
+```typescript
+startReversal(options: ReversalOptions) => any
+```
+
+Start Reversal
+API to start reversal
+
+| Param         | Type                                                        | Description      |
+| ------------- | ----------------------------------------------------------- | ---------------- |
+| **`options`** | <code><a href="#reversaloptions">ReversalOptions</a></code> | : {rrn: string}` |
+
+**Returns:** <code>any</code>
+
+**Since:** 1.0.20
+
+--------------------
+
+
+### startRefund(...)
+
+```typescript
+startRefund(options: RefundOptions) => any
+```
+
+Start Refund
+API to start reversal
+
+| Param         | Type                                                    | Description                      |
+| ------------- | ------------------------------------------------------- | -------------------------------- |
+| **`options`** | <code><a href="#refundoptions">RefundOptions</a></code> | : {amount: string, rrn: string}` |
+
+**Returns:** <code>any</code>
+
+**Since:** 1.0.20
+
+--------------------
+
+
+### startPrintTrans(...)
+
+```typescript
+startPrintTrans(options: PrintTransOptions) => any
+```
+
+Start Print Transaction
+API to start Print Transaction
+
+| Param         | Type                                                            | Description              |
+| ------------- | --------------------------------------------------------------- | ------------------------ |
+| **`options`** | <code><a href="#printtransoptions">PrintTransOptions</a></code> | : {etVoucherNo: string}` |
+
+**Returns:** <code>any</code>
+
+**Since:** 1.0.20
+
+--------------------
+
+
+### startPrintTransTotal(...)
+
+```typescript
+startPrintTransTotal(options: PrintTransTotalOptions) => any
+```
+
+Start Print Transaction Total
+API to start Print Transaction Total
+
+| Param         | Type                                                                      | Description              |
+| ------------- | ------------------------------------------------------------------------- | ------------------------ |
+| **`options`** | <code><a href="#printtranstotaloptions">PrintTransTotalOptions</a></code> | : {etPrintType: string}` |
+
+**Returns:** <code>any</code>
+
+**Since:** 1.0.20
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -94,5 +178,34 @@ API to start payment
 | Prop         | Type                |
 | ------------ | ------------------- |
 | **`amount`** | <code>string</code> |
+
+
+#### ReversalOptions
+
+| Prop      | Type                |
+| --------- | ------------------- |
+| **`rrn`** | <code>string</code> |
+
+
+#### RefundOptions
+
+| Prop         | Type                |
+| ------------ | ------------------- |
+| **`amount`** | <code>string</code> |
+| **`rrn`**    | <code>string</code> |
+
+
+#### PrintTransOptions
+
+| Prop              | Type                |
+| ----------------- | ------------------- |
+| **`etVoucherNo`** | <code>string</code> |
+
+
+#### PrintTransTotalOptions
+
+| Prop              | Type                |
+| ----------------- | ------------------- |
+| **`etPrintType`** | <code>string</code> |
 
 </docgen-api>
