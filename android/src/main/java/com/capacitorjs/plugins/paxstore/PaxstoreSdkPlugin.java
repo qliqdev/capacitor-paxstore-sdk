@@ -36,23 +36,32 @@ public class PaxstoreSdkPlugin extends Plugin {
 
     @PluginMethod
     public void checkInit(PluginCall call) {
-        try {
-            JSObject ret = new JSObject();
-            ret.put("isInitialized", implementation.checkInit());
-            call.resolve(ret);
-        } catch (Exception e) {
-            call.reject(e.getMessage());
-        }
-    }
-
-    @PluginMethod
-    public void getInfo(PluginCall call) {
-        implementation.getInfo(getActivity().getApplication(), call);
+        implementation.checkInit(call);
     }
 
     @PluginMethod
     public void startSale(PluginCall call) {
         implementation.startSale(call, transAPI, getContext());
+    }
+
+    @PluginMethod
+    public void startReversal(PluginCall call) {
+        implementation.startReversal(call, transAPI, getContext());
+    }
+
+    @PluginMethod
+    public void startRefund(PluginCall call) {
+        implementation.startRefund(call, transAPI, getContext());
+    }
+
+    @PluginMethod
+    public void startPrintTrans(PluginCall call) {
+        implementation.startPrintTrans(call, transAPI, getContext());
+    }
+
+    @PluginMethod
+    public void startPrintTransTotal(PluginCall call) {
+        implementation.startPrintTransTotal(call, transAPI, getContext());
     }
 
 }

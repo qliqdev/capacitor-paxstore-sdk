@@ -3,14 +3,19 @@ package com.capacitorjs.plugins.paxstore;
 import android.app.Application;
 import android.content.Context;
 import android.os.RemoteException;
+import android.text.TextUtils;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.getcapacitor.JSObject;
 import com.getcapacitor.PluginCall;
-import com.pax.market.android.app.sdk.BaseApiService;
-import com.pax.market.android.app.sdk.StoreSdk;
-import com.pax.market.android.app.sdk.dto.TerminalInfo;
 import com.pax.unifiedsdk_psp_3rd_app.factory.ITransAPI;
 import com.pax.unifiedsdk_psp_3rd_app.message.PurchaseMsg;
+import com.pax.unifiedsdk_psp_3rd_app.message.RefundMsg;
+import com.pax.unifiedsdk_psp_3rd_app.message.ReprintTotalMsg;
+import com.pax.unifiedsdk_psp_3rd_app.message.ReprintTransMsg;
+import com.pax.unifiedsdk_psp_3rd_app.message.UniReversalMsg;
 import com.pax.unifiedsdk_psp_3rd_app.sdkconstants.SdkConstants;
 
 public class PaxstoreSdk {
@@ -71,58 +76,33 @@ public class PaxstoreSdk {
         }
 
         try {
-            StoreSdk.getInstance().init(activity, appKey, appSecret, new BaseApiService.Callback() {
-                @Override
-                public void initSuccess() {
-                    //TODO Do your business here
+            configs.setAppKey(appKey);
+            configs.setAppSecret(appSecret);
+            configs.setPackageName(packageName);
 
-                    configs.setAppKey(appKey);
-                    configs.setAppSecret(appSecret);
-                    configs.setPackageName(packageName);
-
-                    JSObject ret = new JSObject();
-                    ret.put("value", "Запуск");
-                    call.resolve(ret);
-                }
-
-                @Override
-                public void initFailed(RemoteException e) {
-                    //TODO Do failed logic here
-                    call.reject(e.toString());
-                }
-            });
-
+            JSObject ret = new JSObject();
+            ret.put("value", true);
+            call.resolve(ret);
         } catch (Exception e) {
             call.reject(e.getMessage());
         }
 
     }
 
-    public boolean checkInit() {
-        return StoreSdk.getInstance().checkInitialization();
-    }
+    public boolean checkInit(PluginCall call) {
+        if(configs.getAppKey() == null || configs.getAppSecret() == null || configs.getPackageName() == null){
+            call.reject("Not initialized");
+            return false;
+        }
 
-    public void getInfo(Application activity, PluginCall call) {
         try {
-            StoreSdk.getInstance().getBaseTerminalInfo(activity, new BaseApiService.ICallBack() {
-                @Override
-                public void onSuccess(Object obj) {
-                    TerminalInfo terminalInfo = (TerminalInfo) obj;
-                    JSObject ret = new JSObject();
-                    ret.put("value", terminalInfo);
-                    call.resolve(ret);
-                }
-
-                @Override
-                public void onError(Exception e) {
-                    call.reject(e.toString());
-                }
-            });
-
+            JSObject ret = new JSObject();
+            ret.put("isInitialized", true);
+            call.resolve(ret);
         } catch (Exception e) {
             call.reject(e.getMessage());
         }
-
+        return true;
     }
 
     public boolean startSale(PluginCall call, ITransAPI transAPI, Context context) {
@@ -138,6 +118,105 @@ public class PaxstoreSdk {
             request.setCategory(SdkConstants.CATEGORY_PURCHASE);
             request.setPackageName(configs.getPackageName());
             request.setAppId(configs.getAppKey());
+            Boolean response = transAPI.startTrans(context, request);
+            JSObject ret = new JSObject();
+            ret.put("value", response);
+            call.resolve(ret);
+        } catch (Exception e) {
+            call.reject(e.getMessage());
+        }
+        return true;
+    }
+
+    public boolean startReversal(PluginCall call, ITransAPI transAPI, Context context) {
+        String origRRN = call.getString("rrn");
+        if (origRRN == null) {
+            call.reject("please input original RRN");
+            return false;
+        }
+
+        try {
+            UniReversalMsg.Request request = new UniReversalMsg.Request();
+            request.setOrgRefNo(origRRN);
+            request.setCategory(SdkConstants.CATEGORY_UNI_REVERSAL);
+            request.setPackageName(configs.getPackageName());
+            request.setAppId(configs.getAppKey());
+            Boolean response = transAPI.startTrans(context, request);
+            JSObject ret = new JSObject();
+            ret.put("value", response);
+            call.resolve(ret);
+        } catch (Exception e) {
+            call.reject(e.getMessage());
+        }
+        return true;
+    }
+
+    public boolean startRefund(PluginCall call, ITransAPI transAPI, Context context) {
+        String origRRN = call.getString("rrn");
+        String amount = call.getString("amount");
+        if (origRRN == null) {
+            call.reject("Must provide original RRN");
+            return false;
+        }
+
+        if (amount == null) {
+            call.reject("Must provide amount");
+            return false;
+        }
+
+        try {
+            RefundMsg.Request request = new RefundMsg.Request();
+            request.setAmount(TextUtils.isEmpty(amount) ? 0 : Long.parseLong(amount));
+            request.setOrgRefNo(origRRN);
+            request.setCategory(SdkConstants.CATEGORY_REFUND);
+            request.setAppId(configs.getAppKey());
+            request.setPackageName(configs.getPackageName());
+            Boolean response = transAPI.startTrans(context, request);
+            JSObject ret = new JSObject();
+            ret.put("value", response);
+            call.resolve(ret);
+        } catch (Exception e) {
+            call.reject(e.getMessage());
+        }
+        return true;
+    }
+
+    public boolean startPrintTrans(PluginCall call, ITransAPI transAPI, Context context) {
+        String voucherNo = call.getString("etVoucherNo");
+        if (voucherNo == null) {
+            call.reject("Must provide voucherNo");
+            return false;
+        }
+
+        try {
+            ReprintTransMsg.Request request = new ReprintTransMsg.Request();
+            request.setVoucherNo(Integer.parseInt(voucherNo));
+            request.setCategory(SdkConstants.CATEGORY_PRINT_TRANS);
+            request.setAppId(configs.getAppKey());
+            request.setPackageName(configs.getPackageName());
+            Boolean response = transAPI.startTrans(context, request);
+            JSObject ret = new JSObject();
+            ret.put("value", response);
+            call.resolve(ret);
+        } catch (Exception e) {
+            call.reject(e.getMessage());
+        }
+        return true;
+    }
+
+    public boolean startPrintTransTotal(PluginCall call, ITransAPI transAPI, Context context) {
+        String type = call.getString("etPrintType");
+        if (type == null) {
+            call.reject("Must provide etPrintType");
+            return false;
+        }
+
+        try {
+            ReprintTotalMsg.Request request = new ReprintTotalMsg.Request();
+            request.setReprintType(Integer.parseInt(type));
+            request.setCategory(SdkConstants.CATEGORY_PRINT_TRANS_TOTAL);
+            request.setAppId(configs.getAppKey());
+            request.setPackageName(configs.getPackageName());
             Boolean response = transAPI.startTrans(context, request);
             JSObject ret = new JSObject();
             ret.put("value", response);

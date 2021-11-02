@@ -51,7 +51,6 @@ repositories {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':capacitor-android')
-    implementation 'com.whatspos.sdk:paxstore-3rd-app-android-sdk:8.1.0'
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     implementation 'androidx.databinding:databinding-runtime:4.2.2'
