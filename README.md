@@ -13,10 +13,8 @@ npx cap sync
 
 <docgen-index>
 
-* [`echo(...)`](#echo)
 * [`init(...)`](#init)
 * [`checkInit()`](#checkinit)
-* [`getInfo()`](#getinfo)
 * [`startSale(...)`](#startsale)
 * [Interfaces](#interfaces)
 
@@ -24,25 +22,6 @@ npx cap sync
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
-### echo(...)
-
-```typescript
-echo(options: { value: string; }) => any
-```
-
-Initialize sdk.
-
-| Param         | Type                            | Description                         |
-| ------------- | ------------------------------- | ----------------------------------- |
-| **`options`** | <code>{ value: string; }</code> | : {value: string} Get from offsite. |
-
-**Returns:** <code>any</code>
-
-**Since:** 1.0.0
-
---------------------
-
 
 ### init(...)
 
@@ -74,22 +53,6 @@ Check Initialization.
 **Returns:** <code>any</code>
 
 **Since:** 1.0.8
-
---------------------
-
-
-### getInfo()
-
-```typescript
-getInfo() => any
-```
-
-Get Terminal Base Information
-API to get base terminal information from PAXSTORE client. (Support from PAXSTORE client V6.1.)
-
-**Returns:** <code>any</code>
-
-**Since:** 1.0.7
 
 --------------------
 

@@ -16,7 +16,7 @@ export default {
       format: 'cjs',
       sourcemap: true,
       inlineDynamicImports: true,
-    },
+    }
   ],
   external: ['@capacitor/core'],
 };
