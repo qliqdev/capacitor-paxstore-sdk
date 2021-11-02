@@ -21,7 +21,7 @@ export interface PaxstoreSdkPlugin{
 
     /**
      * Initialize sdk.
-     * @param options: {appKey: string, appSecret: string, packageName: 'com.pax.psp_3rd_app'}
+     * @param `options: {appKey: string, appSecret: string, packageName: 'com.pax.psp_3rd_app'}`
      * Get from offsite.
      * @returns Promise<{ value: string }>
      * @since 1.0.0
