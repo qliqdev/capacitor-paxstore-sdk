@@ -52,9 +52,9 @@ init(options: InitOptions) => any
 
 Initialize sdk.
 
-| Param         | Type                                                | Description                                             |
-| ------------- | --------------------------------------------------- | ------------------------------------------------------- |
-| **`options`** | <code><a href="#initoptions">InitOptions</a></code> | : {appKey: string, appSecret: string} Get from offsite. |
+| Param         | Type                                                | Description                                                                                   |
+| ------------- | --------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#initoptions">InitOptions</a></code> | : string, appSecret: string, packageName: 'com.pax.psp_3rd_app'} &lt;br&gt; Get from offsite. |
 
 **Returns:** <code>any</code>
 
