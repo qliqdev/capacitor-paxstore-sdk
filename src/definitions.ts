@@ -26,6 +26,7 @@ export interface PaxstoreSdkPlugin{
      * @since 1.0.0
      * @example
      * import PaxstoreSdk from 'capacitor-paxstore-sdk';
+     * Use `packageName: 'com.pax.psp_3rd_app'`;
      */
     init(options: InitOptions): Promise<{ value: string }>;
 
