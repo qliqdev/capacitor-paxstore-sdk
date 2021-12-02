@@ -20,6 +20,9 @@ npx cap sync
 * [`startRefund(...)`](#startrefund)
 * [`startPrintTrans(...)`](#startprinttrans)
 * [`startPrintTransTotal(...)`](#startprinttranstotal)
+* [`findPrinters()`](#findprinters)
+* [`setPrinter(...)`](#setprinter)
+* [`printBill(...)`](#printbill)
 * [Interfaces](#interfaces)
 
 </docgen-index>
@@ -161,6 +164,62 @@ API to start Print Transaction Total
 --------------------
 
 
+### findPrinters()
+
+```typescript
+findPrinters() => any
+```
+
+Find printers
+API to List all connected printers
+
+**Returns:** <code>any</code>
+
+**Since:** 1.0.25
+
+--------------------
+
+
+### setPrinter(...)
+
+```typescript
+setPrinter(options: { address: string; }) => any
+```
+
+Select Printer
+API to select printer and init it
+
+| Param         | Type                              |
+| ------------- | --------------------------------- |
+| **`options`** | <code>{ address: string; }</code> |
+
+**Returns:** <code>any</code>
+
+**Since:** 1.0.25
+
+--------------------
+
+
+### printBill(...)
+
+```typescript
+printBill(options: { value: string; }) => any
+```
+
+Print Bill
+API to Print bill
+
+| Param         | Type                            | Description        |
+| ------------- | ------------------------------- | ------------------ |
+| **`options`** | <code>{ value: string; }</code> | : {value: string}` |
+
+**Returns:** <code>any</code>
+
+**Since:** 1.0.21
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -207,5 +266,14 @@ API to start Print Transaction Total
 | Prop              | Type                |
 | ----------------- | ------------------- |
 | **`etPrintType`** | <code>string</code> |
+
+
+#### Printer
+
+| Prop          | Type                |
+| ------------- | ------------------- |
+| **`address`** | <code>string</code> |
+| **`name`**    | <code>string</code> |
+| **`class`**   | <code>string</code> |
 
 </docgen-api>

@@ -1,16 +1,15 @@
 package com.capacitorjs.plugins.paxstore;
 
 import android.app.Application;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
-import android.os.RemoteException;
 import android.text.TextUtils;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-
+import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.PluginCall;
 import com.pax.unifiedsdk_psp_3rd_app.factory.ITransAPI;
+import com.pax.unifiedsdk_psp_3rd_app.factory.TransAPIFactory;
 import com.pax.unifiedsdk_psp_3rd_app.message.PurchaseMsg;
 import com.pax.unifiedsdk_psp_3rd_app.message.RefundMsg;
 import com.pax.unifiedsdk_psp_3rd_app.message.ReprintTotalMsg;
@@ -18,7 +17,11 @@ import com.pax.unifiedsdk_psp_3rd_app.message.ReprintTransMsg;
 import com.pax.unifiedsdk_psp_3rd_app.message.UniReversalMsg;
 import com.pax.unifiedsdk_psp_3rd_app.sdkconstants.SdkConstants;
 
-public class PaxstoreSdk {
+import java.util.Set;
+
+public class PaxstoreSdk extends Printer {
+
+    public ITransAPI transAPI = TransAPIFactory.createTransAPI();
 
     static class PaxConfigs {
         private String appKey;
@@ -51,10 +54,6 @@ public class PaxstoreSdk {
     }
 
     PaxConfigs configs = new PaxConfigs();
-
-    public String echo(String value) {
-        return value;
-    }
 
     public void init(Application activity, PluginCall call) {
         String appKey = call.getString("appKey");
@@ -89,10 +88,10 @@ public class PaxstoreSdk {
 
     }
 
-    public boolean checkInit(PluginCall call) {
-        if(configs.getAppKey() == null || configs.getAppSecret() == null || configs.getPackageName() == null){
+    public void checkInit(PluginCall call) {
+        if (configs.getAppKey() == null || configs.getAppSecret() == null || configs.getPackageName() == null) {
             call.reject("Not initialized");
-            return false;
+            return;
         }
 
         try {
@@ -102,14 +101,13 @@ public class PaxstoreSdk {
         } catch (Exception e) {
             call.reject(e.getMessage());
         }
-        return true;
     }
 
-    public boolean startSale(PluginCall call, ITransAPI transAPI, Context context) {
+    public void startSale(PluginCall call, Context context) {
         String amount = call.getString("amount");
         if (amount == null) {
             call.reject("Must provide amount");
-            return false;
+            return;
         }
 
         try {
@@ -125,14 +123,13 @@ public class PaxstoreSdk {
         } catch (Exception e) {
             call.reject(e.getMessage());
         }
-        return true;
     }
 
-    public boolean startReversal(PluginCall call, ITransAPI transAPI, Context context) {
+    public void startReversal(PluginCall call, Context context) {
         String origRRN = call.getString("rrn");
         if (origRRN == null) {
             call.reject("please input original RRN");
-            return false;
+            return;
         }
 
         try {
@@ -148,20 +145,19 @@ public class PaxstoreSdk {
         } catch (Exception e) {
             call.reject(e.getMessage());
         }
-        return true;
     }
 
-    public boolean startRefund(PluginCall call, ITransAPI transAPI, Context context) {
+    public void startRefund(PluginCall call, Context context) {
         String origRRN = call.getString("rrn");
         String amount = call.getString("amount");
         if (origRRN == null) {
             call.reject("Must provide original RRN");
-            return false;
+            return;
         }
 
         if (amount == null) {
             call.reject("Must provide amount");
-            return false;
+            return;
         }
 
         try {
@@ -178,14 +174,13 @@ public class PaxstoreSdk {
         } catch (Exception e) {
             call.reject(e.getMessage());
         }
-        return true;
     }
 
-    public boolean startPrintTrans(PluginCall call, ITransAPI transAPI, Context context) {
+    public void startPrintTrans(PluginCall call, Context context) {
         String voucherNo = call.getString("etVoucherNo");
         if (voucherNo == null) {
             call.reject("Must provide voucherNo");
-            return false;
+            return;
         }
 
         try {
@@ -201,14 +196,13 @@ public class PaxstoreSdk {
         } catch (Exception e) {
             call.reject(e.getMessage());
         }
-        return true;
     }
 
-    public boolean startPrintTransTotal(PluginCall call, ITransAPI transAPI, Context context) {
+    public void startPrintTransTotal(PluginCall call, Context context) {
         String type = call.getString("etPrintType");
         if (type == null) {
             call.reject("Must provide etPrintType");
-            return false;
+            return;
         }
 
         try {
@@ -224,6 +218,59 @@ public class PaxstoreSdk {
         } catch (Exception e) {
             call.reject(e.getMessage());
         }
-        return true;
+    }
+
+    public void findPrinters(PluginCall call) {
+        Set<BluetoothDevice> printers = findBT(call);
+        if (!printers.isEmpty()) {
+            JSArray printerArr = new JSArray();
+            for (BluetoothDevice device : printers) {
+                JSObject deviceObj = new JSObject();
+                deviceObj.put("address", device.getAddress());
+                deviceObj.put("name", device.getName());
+                deviceObj.put("class", device.getBluetoothClass());
+                printerArr.put(deviceObj);
+            }
+            JSObject ret = new JSObject();
+            ret.put("printers", printerArr);
+            call.resolve(ret);
+        } else {
+            call.reject("No printers found");
+        }
+    }
+
+    public void setPrinter(PluginCall call) {
+        String address = call.getString("address");
+        try {
+            setBT(address);
+            JSObject ret = new JSObject();
+            ret.put("success", true);
+            call.resolve(ret);
+        } catch (Exception e) {
+            call.reject("Printer didn't initialized");
+            e.printStackTrace();
+        }
+
+    }
+
+    public void printBill(PluginCall call) {
+        String value = call.getString("value");
+        if (value == null) {
+            call.reject("Must provide value");
+            return;
+        }
+
+        try {
+            openBT();
+            printTxt(value);
+            closeBT();
+
+            JSObject ret = new JSObject();
+            ret.put("success", true);
+            call.resolve(ret);
+        } catch (Exception e) {
+            call.reject(e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

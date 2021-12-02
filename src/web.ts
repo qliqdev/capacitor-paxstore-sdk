@@ -30,4 +30,16 @@ export class PaxstoreSdkWeb extends WebPlugin implements PaxstoreSdkPlugin {
   startPrintTransTotal(): Promise<{value: any}> {
     throw this.unimplemented('Not implemented on web.');
   }
+
+  findPrinters(): Promise<{printers: any}> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
+  setPrinter(): Promise<{success: boolean}> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
+  printBill(): Promise<{success: boolean}> {
+    throw this.unimplemented('Not implemented on web.');
+  }
 }

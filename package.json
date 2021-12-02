@@ -1,12 +1,13 @@
 {
   "name": "capacitor-paxstore-sdk",
-  "version": "1.0.20",
+  "version": "1.0.30",
   "description": "Communicate with Paxstore SDK, to receive data from POS treminals.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "unpkg": "dist/plugin.js",
   "files": [
+    "android/libs/",
     "android/src/main/",
     "android/build.gradle",
     "dist/",
@@ -51,6 +52,7 @@
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "^2.0.0",
     "@ionic/swiftlint-config": "^1.1.2",
+    "@typescript-eslint/eslint-plugin": "^5.5.0",
     "eslint": "^7.32.0",
     "prettier": "~2.4.1",
     "prettier-plugin-java": "~1.0.0",

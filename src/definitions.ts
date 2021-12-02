@@ -25,6 +25,12 @@ export interface PrintTransTotalOptions {
     etPrintType: string;
 }
 
+export interface Printer{
+    address: string;
+    name: string;
+    class: string;
+}
+
 export interface PaxstoreSdkPlugin{
 
     /**
@@ -102,4 +108,35 @@ export interface PaxstoreSdkPlugin{
      * import PaxstoreSdk from 'capacitor-paxstore-sdk';
      */
     startPrintTransTotal(options: PrintTransTotalOptions): Promise<{ value: any }>;
+
+    /**
+     * Find printers
+     * API to List all connected printers
+     * @returns Promise<{ printers: any }>
+     * @since 1.0.25
+     * @example
+     * import PaxstoreSdk from 'capacitor-paxstore-sdk';
+     */
+    findPrinters(): Promise<{ printers: Printer[] }>;
+
+    /**
+     * Select Printer
+     * API to select printer and init it
+     * @returns Promise<{ success: any }>
+     * @since 1.0.25
+     * @example
+     * import PaxstoreSdk from 'capacitor-paxstore-sdk';
+     */
+    setPrinter(options: {address: string}): Promise<{ success: boolean }>;
+
+    /**
+     * Print Bill
+     * API to Print bill
+     * @param `options: {value: string}`
+     * @returns Promise<{ value: any }>
+     * @since 1.0.21
+     * @example
+     * import PaxstoreSdk from 'capacitor-paxstore-sdk';
+     */
+    printBill(options: {value: string}): Promise<{ success: boolean }>;
 }

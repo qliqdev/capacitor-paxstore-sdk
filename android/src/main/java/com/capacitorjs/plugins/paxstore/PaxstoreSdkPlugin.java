@@ -1,33 +1,14 @@
 package com.capacitorjs.plugins.paxstore;
 
-import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
-import com.pax.unifiedsdk_psp_3rd_app.factory.ITransAPI;
-import com.pax.unifiedsdk_psp_3rd_app.factory.TransAPIFactory;
-import com.pax.unifiedsdk_psp_3rd_app.message.BaseResponse;
 
 @CapacitorPlugin(name = "PaxstoreSdk")
 public class PaxstoreSdkPlugin extends Plugin {
 
-    public ITransAPI transAPI = TransAPIFactory.createTransAPI();
-    private BaseResponse baseResponse;
-
     private final PaxstoreSdk implementation = new PaxstoreSdk();
-
-    @PluginMethod
-    public void echo(PluginCall call) {
-        String value = call.getString("value");
-        try {
-            JSObject ret = new JSObject();
-            ret.put("value", implementation.echo(value));
-            call.resolve(ret);
-        } catch (Exception e) {
-            call.reject(e.getMessage());
-        }
-    }
 
     @PluginMethod
     public void init(PluginCall call) {
@@ -41,27 +22,42 @@ public class PaxstoreSdkPlugin extends Plugin {
 
     @PluginMethod
     public void startSale(PluginCall call) {
-        implementation.startSale(call, transAPI, getContext());
+        implementation.startSale(call, getContext());
     }
 
     @PluginMethod
     public void startReversal(PluginCall call) {
-        implementation.startReversal(call, transAPI, getContext());
+        implementation.startReversal(call, getContext());
     }
 
     @PluginMethod
     public void startRefund(PluginCall call) {
-        implementation.startRefund(call, transAPI, getContext());
+        implementation.startRefund(call, getContext());
     }
 
     @PluginMethod
     public void startPrintTrans(PluginCall call) {
-        implementation.startPrintTrans(call, transAPI, getContext());
+        implementation.startPrintTrans(call, getContext());
     }
 
     @PluginMethod
     public void startPrintTransTotal(PluginCall call) {
-        implementation.startPrintTransTotal(call, transAPI, getContext());
+        implementation.startPrintTransTotal(call, getContext());
+    }
+
+    @PluginMethod
+    public void findPrinters(PluginCall call) {
+        implementation.findPrinters(call);
+    }
+
+    @PluginMethod
+    public void setPrinter(PluginCall call) {
+        implementation.setPrinter(call);
+    }
+
+    @PluginMethod
+    public void printBill(PluginCall call) {
+        implementation.printBill(call);
     }
 
 }
